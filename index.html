@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategy Notebook — Pedro Cunha | eMBA PBS 2025/2026</title>
+<style>
+:root {
+  --bg: #fafaf9;
+  --sidebar-bg: #1c1917;
+  --sidebar-text: #d6d3d1;
+  --sidebar-active: #f59e0b;
+  --accent: #b45309;
+  --accent-light: #fef3c7;
+  --text: #1c1917;
+  --text-muted: #57534e;
+  --border: #e7e5e4;
+  --card-bg: #ffffff;
+  --quote-bg: #fffbeb;
+  --quote-border: #f59e0b;
+  --table-header: #292524;
+  --table-header-text: #fafaf9;
+  --table-stripe-alt: #f5f5f4;
+  --code-bg: #292524;
+  --code-text: #fde68a;
+  --search-bg: #292524;
+  --tag-bg: #fef3c7;
+  --tag-text: #92400e;
+  --enrichment-bg: #ecfdf5;
+  --enrichment-border: #059669;
+  --highlight: #fde68a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid #44403c;
+  flex-shrink: 0;
+}
+
+.sidebar-header h1 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fafaf9;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-header .subtitle {
+  font-size: 12px;
+  color: #a8a29e;
+  margin-top: 4px;
+}
+
+.sidebar-search {
+  padding: 12px 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-search input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--search-bg);
+  border: 1px solid #44403c;
+  border-radius: 6px;
+  color: #fafaf9;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sidebar-search input::placeholder { color: #78716c; }
+.sidebar-search input:focus { border-color: var(--sidebar-active); }
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.nav-section {
+  margin-bottom: 8px;
+}
+
+.nav-section-title {
+  padding: 12px 20px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a8a29e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-item {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--sidebar-active);
+}
+
+.nav-item.active {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--sidebar-active);
+  border-left-color: var(--sidebar-active);
+  font-weight: 600;
+}
+
+.nav-sub {
+  padding-left: 40px;
+  font-size: 13px;
+  color: #a8a29e;
+}
+
+.nav-sub .nav-item:hover {
+  color: var(--sidebar-active);
+}
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #44403c;
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #78716c;
+}
+
+/* TOPBAR */
+.topbar {
+  position: sticky;
+  top: 0;
+  left: 280px;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+  height: 64px;
+  transition: left 0.3s ease;
+}
+
+.topbar-breadcrumb {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.topbar-breadcrumb a {
+  color: var(--sidebar-active);
+  text-decoration: none;
+  margin: 0 4px;
+}
+
+.topbar-breadcrumb a:hover { text-decoration: underline; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  justify-content: space-between;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 280px;
+  padding: 40px;
+  transition: margin-left 0.3s ease;
+}
+
+/* HERO SECTION */
+.hero {
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.hero-meta {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.hero-meta strong { color: var(--accent); }
+
+/* SECTIONS */
+section {
+  margin-bottom: 80px;
+}
+
+section h2 {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--sidebar-active);
+  display: inline-block;
+}
+
+section h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+section h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 24px;
+  margin-bottom: 12px;
+}
+
+section p {
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+section ul, section ol {
+  margin: 16px 0 16px 24px;
+  color: var(--text);
+}
+
+section li {
+  margin-bottom: 8px;
+}
+
+/* QUOTES */
+.quote {
+  background: var(--quote-bg);
+  border-left: 4px solid var(--quote-border);
+  padding: 20px 24px;
+  margin: 24px 0;
+  font-style: italic;
+  color: var(--text);
+  border-radius: 4px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.quote::before {
+  content: '"';
+  font-size: 40px;
+  color: var(--quote-border);
+  line-height: 0;
+  margin-right: 8px;
+  vertical-align: -0.4em;
+}
+
+/* ENRICHMENT BLOCKS */
+.enrichment {
+  background: var(--enrichment-bg);
+  border: 2px solid var(--enrichment-border);
+  border-radius: 6px;
+  padding: 20px 24px;
+  margin: 24px 0;
+  color: var(--text);
+}
+
+.enrichment::before {
+  content: '✦ ';
+  color: var(--enrichment-border);
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+/* IMAGES */
+.image-container {
+  margin: 32px 0;
+  text-align: center;
+}
+
+.image-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  loading: lazy;
+}
+
+.image-caption {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-style: italic;
+}
+
+/* GALLERIES - Collapsible */
+.gallery {
+  margin: 24px 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.gallery-toggle {
+  background: var(--search-bg);
+  color: #fafaf9;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s;
+}
+
+.gallery-toggle:hover {
+  background: #3f3c3a;
+}
+
+.gallery-toggle::before {
+  content: '▶ ';
+  transition: transform 0.3s ease;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.gallery-toggle.expanded::before {
+  transform: rotate(90deg);
+}
+
+.gallery-content {
+  display: none;
+  padding: 16px;
+  background: #fafaf9;
+}
+
+.gallery-content.expanded {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.gallery-item {
+  text-align: center;
+}
+
+.gallery-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.gallery-item-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* TABLES */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+table thead {
+  background: var(--table-header);
+  color: var(--table-header-text);
+}
+
+table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+}
+
+table tbody tr:nth-child(odd) {
+  background: #fafaf900;
+}
+
+table tbody tr:nth-child(even) {
+  background: var(--table-stripe-alt);
+}
+
+table tbody tr:hover {
+  background: var(--accent-light);
+}
+
+/* BACK TO TOP */
+.back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 48px;
+  height: 48px;
+  background: var(--sidebar-active);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 99;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top:hover {
+  background: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .topbar {
+    left: 0;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 24px;
+  }
+
+  section h2 {
+    font-size: 28px;
+  }
+
+  section h3 {
+    font-size: 18px;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .gallery-content.expanded {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .back-to-top {
+    bottom: 24px;
+    right: 24px;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media print {
+  .sidebar, .topbar, .hamburger, .back-to-top, .sidebar-search {
+    display: none;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 0;
+  }
+
+  section {
+    page-break-inside: avoid;
+    margin-bottom: 40px;
+  }
+
+  .gallery-content {
+    display: block !important;
+  }
+
+  .gallery-item {
+    margin-bottom: 20px;
+  }
+}
+
+.section-id { display: block; }
+
+.reflection {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 1.2em 1.5em;
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.reflection h4 {
+    color: #1e40af;
+    margin-top: 0;
+    font-size: 0.95em;
+}
+
+.reflection p {
+    color: #1e3a5f;
+    line-height: 1.7;
+}
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR NAVIGATION -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1>Strategy</h1>
+    <div class="subtitle">Notebook 2025/26</div>
+  </div>
+
+  <div class="sidebar-search">
+    <input type="text" id="searchInput" placeholder="Search sections...">
+  </div>
+
+  <nav class="sidebar-nav" id="sidebarNav">
+    <div class="nav-section">
+      <div class="nav-section-title">Navigation</div>
+      <div class="nav-item" data-section="cover">Cover</div>
+      <div class="nav-item" data-section="section-i">I · Fundamentos</div>
+      <div class="nav-item" data-section="section-ii">II · Posição Estratégica</div>
+      <div class="nav-item" data-section="section-iii">III · Direção Estratégica</div>
+      <div class="nav-item" data-section="section-iv">IV · Estratégias Corporativas</div>
+      <div class="nav-item" data-section="section-v">V · Internacionalização</div>
+      <div class="nav-item" data-section="section-vi">VI · Toolkit Estratégico</div>
+      <div class="nav-item" data-section="section-vii">VII · Preparação para Exame</div>
+      <div class="nav-item" data-section="section-ix">IX · Momentos Memoráveis</div>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    PBS eMBA Strategy · Março 2026
+  </div>
+</aside>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-breadcrumb" id="breadcrumb">Home</div>
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+<!-- COVER -->
+<section id="cover" class="section-id">
+  <div class="hero">
+    <h1>Strategy Notebook</h1>
+    <div class="hero-meta">
+      <div><strong>Executive MBA</strong> · Porto Business School · 2025/2026</div>
+      <div style="margin-top: 8px;">Professor: <strong>Luís Filipe Reis</strong></div>
+      <div>Student: <strong>Pedro Cunha</strong></div>
+      <div style="margin-top: 12px; font-style: italic; color: #78716c;">Notas de Aula · Manuscritas · iPad · AI-Augmented</div>
+      <div style="margin-top: 24px; font-size: 12px; letter-spacing: 0.5px;">Março 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION I: FUNDAMENTOS -->
+<section id="section-i" class="section-id">
+  <h2>I · Fundamentos da Estratégia</h2>
+  <p><em>Aula 1</em></p>
+
+  <h3>O que é Estratégia?</h3>
+  <p>A estratégia é sobre direção de longo prazo e o desenvolvimento de uma mentalidade estratégica. Não é uma ciência exata, mas uma arte que combina análise com intuição e visão.</p>
+
+  <div class="quote">Eu não vos quero ensinar estratégias. Eu quero tentar ajudar-vos a pensar de forma estratégica.</div>
+
+  <div class="quote">A única ferramenta que precisam de trazer é a cabeça.</div>
+
+  <div class="quote">Quanto mais sabemos, mais sabemos que não sabemos.</div>
+
+  <h3>Definições Clássicas</h3>
+  <ul>
+    <li><strong>Chandler:</strong> Objetivos de longo prazo + Ações + Recursos</li>
+    <li><strong>Porter:</strong> Ser diferente, um conjunto de atividades únicas e distintivas</li>
+    <li><strong>Mintzberg:</strong> Um padrão num fluxo de decisões</li>
+    <li><strong>Exploring Strategy:</strong> Direção de longo prazo e sua sustentabilidade</li>
+  </ul>
+
+  <div class="quote">Estratégia é a capacidade de controlar as variáveis incontroláveis, à custa do controlo das variáveis controláveis.</div>
+
+  <div class="image-container">
+    <img src="media/image1.jpg" alt="DNA da Estratégia" loading="lazy">
+    <div class="image-caption">DNA da Estratégia</div>
+  </div>
+
+  <h3>As Duas Perguntas Fundamentais</h3>
+  <ol>
+    <li><strong>Onde estamos e o que defendemos?</strong> (Posição Estratégica)</li>
+    <li><strong>Para onde vamos e porquê?</strong> (Decisões Estratégicas)</li>
+  </ol>
+
+  <div class="image-container">
+    <img src="media/image2.png" alt="As duas perguntas fundamentais" loading="lazy">
+    <div class="image-caption">As Duas Perguntas Fundamentais</div>
+  </div>
+
+  <div class="quote">Em estratégia, há uma parte em que temos que pensar. Temos que analisar. Temos que refletir.</div>
+
+  <h3>O Processo Estratégico</h3>
+  <p>O processo estratégico não é linear, mas iterativo. Compreende três fases principais:</p>
+  <ol>
+    <li>Análise Situacional</li>
+    <li>Definição de Objetivos e Estratégias</li>
+    <li>Implementação</li>
+  </ol>
+  <p>Este ciclo repete-se continuamente, à medida que o ambiente muda e aprendemos com a implementação.</p>
+
+  <h3>Níveis de Estratégia</h3>
+  <ul>
+    <li><strong>Estratégia Corporativa:</strong> Em que negócios competimos? Qual é o portfólio?</li>
+    <li><strong>Estratégia de Negócios:</strong> Como competimos em cada negócio?</li>
+    <li><strong>Estratégia Operacional:</strong> Como executamos as decisões estratégicas?</li>
+  </ul>
+
+  <h3>Horizontes Estratégicos</h3>
+
+  <div class="image-container">
+    <img src="media/image3.jpg" alt="3 Horizontes Estratégicos" loading="lazy">
+    <div class="image-caption">Os 3 Horizontes Estratégicos</div>
+  </div>
+
+  <ul>
+    <li><strong>H1 - Defender/Proteger:</strong> Curto prazo. Maximizar fluxo de caixa do negócio existente.</li>
+    <li><strong>H2 - Desenvolver:</strong> Médio prazo. Expandir mercados existentes, novos produtos.</li>
+    <li><strong>H3 - Semear:</strong> Longo prazo. Investir em inovação, novos modelos de negócio.</li>
+  </ul>
+
+  <h3>Estratégia e Ética</h3>
+  <p>A ética é subjetiva e varia com o tempo, geografia e julgamento pessoal. O quadrante ético-legal ajuda-nos a pensar sobre as nossas decisões:</p>
+
+  <div class="image-container">
+    <img src="media/image4.jpg" alt="Matriz Ética Legal" loading="lazy">
+    <div class="image-caption">Matriz Ética-Legal</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image5.png" alt="Ética Diagrama" loading="lazy">
+    <div class="image-caption">Diagrama Ética</div>
+  </div>
+
+  <ul>
+    <li><strong>Ético + Legal:</strong> O ideal. Prosseguir com confiança.</li>
+    <li><strong>Ético + Ilegal:</strong> Dilema. Requer reflexão e julgamento.</li>
+    <li><strong>Antiético + Legal:</strong> Risco. Potencial para dano reputacional.</li>
+    <li><strong>Antiético + Ilegal:</strong> Evitar completamente.</li>
+  </ul>
+
+  <div class="quote">Violar lei é fazível, nunca violando ética.</div>
+
+  <h3>Propósito: Riqueza e Saúde</h3>
+  <p>Toda a estratégia deve equilibrar dois objetivos:</p>
+  <ul>
+    <li><strong>Riqueza:</strong> Criação de valor económico (curto prazo)</li>
+    <li><strong>Saúde:</strong> Sustentabilidade e legado (longo prazo)</li>
+  </ul>
+
+  <div class="quote">Todo o nosso trabalho deve ser orientado para sermos ricos e saudáveis.</div>
+
+  <h3>Natureza das Decisões Estratégicas</h3>
+  <p>As decisões estratégicas não são certas ou erradas. São suficientemente ou insuficientemente fundamentadas. A qualidade da decisão depende da informação disponível e do processo de reflexão.</p>
+
+  <div class="quote">Decisões estratégicas devem ser baseadas na máxima informação disponível no momento.</div>
+
+<div class="reflection">
+  <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+  <p>Quando reflito sobre os fundamentos da estratégia à luz da minha experiência como fundador de um ecossistema de empresas — Portilame, Portezi, Proemma, BIND, entre outras — percebo que a frase do Professor sobre 'pensar de forma estratégica' em vez de 'aprender estratégias' é profundamente verdadeira. Nos últimos vinte anos, nunca apliquei um modelo de forma mecânica. O que fiz, muitas vezes sem saber que era 'estratégia formal', foi construir organizações tentando equilibrar os três horizontes: proteger o core da Portilame (H1), desenvolver a Proemma e a BIND como extensões naturais (H2), e semear oportunidades como a PUUR Clinic ou a PAZONARA (H3). A ética, que o Professor enquadra como subjetiva mas inviolável, é para mim um valor fundacional — mais do que um quadrante teórico, é a base sobre a qual construo relações duradouras com colaboradores, parceiros e clientes.</p>
+</div>
+
+    <!-- Handwritten Notes Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📝 Handwritten Notes (Páginas 7-15)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image6.jpg" alt="Nota manuscrita p.7" loading="lazy"><div class="gallery-item-label">p.7</div></div>
+      <div class="gallery-item"><img src="media/image7.jpg" alt="Nota manuscrita p.8" loading="lazy"><div class="gallery-item-label">p.8</div></div>
+      <div class="gallery-item"><img src="media/image8.jpg" alt="Nota manuscrita p.9" loading="lazy"><div class="gallery-item-label">p.9</div></div>
+      <div class="gallery-item"><img src="media/image9.jpg" alt="Nota manuscrita p.10" loading="lazy"><div class="gallery-item-label">p.10</div></div>
+      <div class="gallery-item"><img src="media/image10.jpg" alt="Nota manuscrita p.11" loading="lazy"><div class="gallery-item-label">p.11</div></div>
+      <div class="gallery-item"><img src="media/image11.jpg" alt="Nota manuscrita p.12" loading="lazy"><div class="gallery-item-label">p.12</div></div>
+      <div class="gallery-item"><img src="media/image12.jpg" alt="Nota manuscrita p.13" loading="lazy"><div class="gallery-item-label">p.13</div></div>
+      <div class="gallery-item"><img src="media/image13.jpg" alt="Nota manuscrita p.14" loading="lazy"><div class="gallery-item-label">p.14</div></div>
+      <div class="gallery-item"><img src="media/image14.jpg" alt="Nota manuscrita p.15" loading="lazy"><div class="gallery-item-label">p.15</div></div>
+    </div>
+  </div>
+
+  <!-- Class Photos Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📸 Class Sessions</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image15.jpg" alt="Mind-map Sessão 1" loading="lazy"><div class="gallery-item-label">Mind-map Sessão 1</div></div>
+      <div class="gallery-item"><img src="media/image16.jpg" alt="Porter no quadro" loading="lazy"><div class="gallery-item-label">Porter no quadro</div></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SECTION II: POSIÇÃO ESTRATÉGICA -->
+<section id="section-ii" class="section-id">
+  <h2>II · Posição Estratégica</h2>
+  <p><em>Aula 2</em></p>
+
+  <h3>VUCA: O Ambiente Complexo</h3>
+  <p>VUCA descreve o ambiente empresarial atual:</p>
+  <ul>
+    <li><strong>V - Volatile:</strong> Mudança rápida e imprevisível</li>
+    <li><strong>U - Uncertain:</strong> Difícil de prever</li>
+    <li><strong>C - Complex:</strong> Muitos fatores interligados</li>
+    <li><strong>A - Ambiguous:</strong> Múltiplas interpretações possíveis</li>
+  </ul>
+
+  <div class="image-container">
+    <img src="media/image17.jpg" alt="VUCA World" loading="lazy">
+    <div class="image-caption">VUCA World</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image18.png" alt="Framework VUCA" loading="lazy">
+    <div class="image-caption">Framework VUCA</div>
+  </div>
+
+  <p><strong>Estratégia:</strong> Decompor VUCA e lidar com cada dimensão individualmente.</p>
+
+  <h3>Os 6D's da Transformação Digital</h3>
+  <ul>
+    <li><strong>Digitalização:</strong> Converter dados em formato digital</li>
+    <li><strong>Engano (Deception):</strong> Modelos de negócio inteiramente novos</li>
+    <li><strong>Disrupção:</strong> Mudança radical da indústria</li>
+    <li><strong>Desmonetização:</strong> Eliminação de modelos de negócio tradicionais</li>
+    <li><strong>Desmaterialização:</strong> Substituição de produtos físicos por digitais</li>
+    <li><strong>Democratização:</strong> Acesso a tecnologia avançada para todos</li>
+  </ul>
+
+  <div class="image-container">
+    <img src="media/image19.jpg" alt="Maturidade Digital" loading="lazy">
+    <div class="image-caption">Maturidade Digital</div>
+  </div>
+
+  <h3>PESTEL: Análise do Macroambiente</h3>
+  <p>PESTEL examina seis dimensões externas que afetam qualquer negócio:</p>
+
+  <div class="image-container">
+    <img src="media/image20.jpg" alt="PESTEL" loading="lazy">
+    <div class="image-caption">PESTEL Analysis</div>
+  </div>
+
+  <ul>
+    <li><strong>Political:</strong> Decisões políticas, estabilidade, regulação</li>
+    <li><strong>Economic:</strong> Crescimento, inflação, taxas de juro</li>
+    <li><strong>Social:</strong> Valores culturais, demografia, tendências</li>
+    <li><strong>Technological:</strong> Inovação, disrupção, adoção digital</li>
+    <li><strong>Environmental:</strong> Sustentabilidade, regulação ambiental</li>
+    <li><strong>Legal:</strong> Marcos regulatórios, conformidade</li>
+  </ul>
+
+  <div class="quote">A regulação determina o essencial do setor.</div>
+
+  <div class="enrichment">Key Drivers for Change e Headwinds/Tailwinds - Identificar quais forças externas são favoráveis (tailwinds) e quais são obstáculos (headwinds) para a sua estratégia.</div>
+
+  <h3>Porter+ (5+3): Análise de Forças Competitivas</h3>
+  <p>Porter's Five Forces modelo tradicional é expandido com três forças adicionais:</p>
+
+  <div class="image-container">
+    <img src="media/image21.jpg" alt="Porter+ 5+3" loading="lazy">
+    <div class="image-caption">Porter+ Framework</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image22.png" alt="Porter Expandido" loading="lazy">
+    <div class="image-caption">Porter Expandido (5+3)</div>
+  </div>
+
+  <ul>
+    <li><strong>Ameaça de Novos Entrantes</strong></li>
+    <li><strong>Poder de Negociação dos Fornecedores</strong></li>
+    <li><strong>Poder de Negociação dos Clientes</strong></li>
+    <li><strong>Ameaça de Produtos Substitutos</strong></li>
+    <li><strong>Rivalidade entre Concorrentes Existentes</strong></li>
+    <li><strong>Tecnologia</strong> (novo)</li>
+    <li><strong>Regulação</strong> (novo)</li>
+    <li><strong>Barreiras à Entrada</strong> (novo)</li>
+  </ul>
+
+  <div class="quote">Só quando tem consequências brutais...</div>
+
+  <h3>Níveis de Concorrência</h3>
+  <ul>
+    <li><strong>C1 - Concorrência Direta:</strong> Mesmo produto/serviço</li>
+    <li><strong>C2 - Concorrência Indireta:</strong> Produtos/serviços diferentes, mesma necessidade</li>
+    <li><strong>C3 - Concorrência de Rendimento:</strong> Luta pelo mesmo bolsila do cliente</li>
+    <li><strong>C4 - Concorrência de Atenção:</strong> Luta pelo tempo e atenção</li>
+  </ul>
+
+  <h3>Capabilities (Gary Hamel): Recursos e Competências</h3>
+
+  <div class="image-container">
+    <img src="media/image23.jpg" alt="VRIN" loading="lazy">
+    <div class="image-caption">VRIN Framework</div>
+  </div>
+
+  <ul>
+    <li><strong>Ativos Críticos:</strong> Propriedade intelectual, marcas, relacionamentos</li>
+    <li><strong>Competências Distintivas:</strong> O que sabemos fazer melhor que os concorrentes</li>
+    <li><strong>Relações Privilegiadas:</strong> Parcerias, acordos exclusivos, redes</li>
+  </ul>
+
+  <div class="quote">Competências distintivas são aquilo que somos capazes de fazer...</div>
+
+  <h3>VRIN: Avaliando Competências</h3>
+  <ul>
+    <li><strong>V - Valioso:</strong> Cria valor para o cliente</li>
+    <li><strong>R - Raro:</strong> Poucos concorrentes o têm</li>
+    <li><strong>I - Inimitável:</strong> Difícil de copiar</li>
+    <li><strong>N - Não Substituível:</strong> Não existe alternativa</li>
+  </ul>
+
+  <div class="quote">Para ser fácil é preciso ser muito bom atrás.</div>
+
+  <div class="enrichment">Joia da Coroa - A competência mais valiosa e distintiva da organização. Teste do Algodão - Se retirasse isto, o cliente ainda teria valor?</div>
+
+  <h3>Rotina de Informação Estratégica</h3>
+
+  <div class="image-container">
+    <img src="media/image24.jpg" alt="Rotina Informação" loading="lazy">
+    <div class="image-caption">Rotina de Informação Estratégica</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image25.png" alt="Info Routine" loading="lazy">
+    <div class="image-caption">Information Routine Diagram</div>
+  </div>
+
+  <h3>Cultura Organizacional (Cultural Web)</h3>
+
+  <div class="image-container">
+    <img src="media/image26.jpg" alt="Cultural Web" loading="lazy">
+    <div class="image-caption">Cultural Web - Os 6 Elementos da Cultura</div>
+  </div>
+
+  <ul>
+    <li><strong>Histórias:</strong> Narrativas que definem quem somos</li>
+    <li><strong>Símbolos:</strong> Objetos, imagens que representam valores</li>
+    <li><strong>Estrutura de Poder:</strong> Quem tem influência e por quê</li>
+    <li><strong>Estrutura Organizacional:</strong> Como nos organizamos</li>
+    <li><strong>Sistemas de Controlo:</strong> Métricas, medições, incentivos</li>
+    <li><strong>Rituais e Rotinas:</strong> O que fazemos regularmente</li>
+  </ul>
+
+<div class="reflection">
+  <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+  <p>A análise PESTEL aplicada ao setor da construção em madeira em Portugal revela um cenário interessante: há tailwinds regulatórios fortes (incentivos à construção sustentável, metas europeias de descarbonização) mas headwinds culturais significativos (a madeira ainda é vista como material 'inferior' ao betão). O Porter+ do meu setor mostra uma indústria em transformação: poucos concorrentes com escala industrial, poder negocial elevado dos fornecedores de matéria-prima (dependência de importações de madeira certificada), e uma ameaça crescente de entrantes com tecnologia CLT. A Joia da Coroa do meu ecossistema é a integração vertical — desde o projeto (BIND) à engenharia (Portilame) ao produto final — algo que passa o teste VRIN completo. É Valioso, Raro em Portugal, difícil de Imitar (requer décadas de know-how acumulado) e Não Substituível enquanto a sustentabilidade for prioritária.</p>
+</div>
+
+    <!-- Handwritten Notes Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📝 Handwritten Notes (Páginas 16-26)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image27.jpg" alt="Nota manuscrita p.16" loading="lazy"><div class="gallery-item-label">p.16</div></div>
+      <div class="gallery-item"><img src="media/image28.jpg" alt="Nota manuscrita p.17" loading="lazy"><div class="gallery-item-label">p.17</div></div>
+      <div class="gallery-item"><img src="media/image29.jpg" alt="Nota manuscrita p.18" loading="lazy"><div class="gallery-item-label">p.18</div></div>
+      <div class="gallery-item"><img src="media/image30.jpg" alt="Nota manuscrita p.19" loading="lazy"><div class="gallery-item-label">p.19</div></div>
+      <div class="gallery-item"><img src="media/image31.jpg" alt="Nota manuscrita p.20" loading="lazy"><div class="gallery-item-label">p.20</div></div>
+      <div class="gallery-item"><img src="media/image32.jpg" alt="Nota manuscrita p.21" loading="lazy"><div class="gallery-item-label">p.21</div></div>
+      <div class="gallery-item"><img src="media/image33.jpg" alt="Nota manuscrita p.22" loading="lazy"><div class="gallery-item-label">p.22</div></div>
+      <div class="gallery-item"><img src="media/image34.jpg" alt="Nota manuscrita p.23" loading="lazy"><div class="gallery-item-label">p.23</div></div>
+      <div class="gallery-item"><img src="media/image35.jpg" alt="Nota manuscrita p.24" loading="lazy"><div class="gallery-item-label">p.24</div></div>
+      <div class="gallery-item"><img src="media/image36.jpg" alt="Nota manuscrita p.25" loading="lazy"><div class="gallery-item-label">p.25</div></div>
+      <div class="gallery-item"><img src="media/image37.jpg" alt="Nota manuscrita p.26" loading="lazy"><div class="gallery-item-label">p.26</div></div>
+    </div>
+  </div>
+
+  <!-- Class Photos Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📸 Class Sessions</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image38.jpg" alt="2 Mandíbulas" loading="lazy"><div class="gallery-item-label">As 2 Mandíbulas</div></div>
+      <div class="gallery-item"><img src="media/image39.jpg" alt="Value Curve no quadro" loading="lazy"><div class="gallery-item-label">Value Curve no quadro</div></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SECTION III: DIREÇÃO ESTRATÉGICA -->
+<section id="section-iii" class="section-id">
+  <h2>III · Direção Estratégica</h2>
+  <p><em>Aula 3</em></p>
+
+  <h3>Business Strategy: 5 Perguntas Essenciais</h3>
+  <ol>
+    <li><strong>Where to Play?</strong> - Em que mercados/segmentos?</li>
+    <li><strong>Right to Play?</strong> - Temos competências/ativos para isto?</li>
+    <li><strong>How to Play?</strong> - Qual é a nossa estratégia de valor?</li>
+    <li><strong>How Differently?</strong> - Em que somos únicos?</li>
+    <li><strong>How Along Time?</strong> - Como evoluímos?</li>
+  </ol>
+
+  <h3>SWOT e Alinhamento Estratégico</h3>
+  <p>O SWOT (Strengths, Weaknesses, Opportunities, Threats) ajuda a alinhar a posição interna com as oportunidades externas.</p>
+
+  <p>McKinsey 7S Framework alinha:</p>
+  <ul>
+    <li><strong>Strategy:</strong> A direção</li>
+    <li><strong>Structure:</strong> Organização</li>
+    <li><strong>Systems:</strong> Processos</li>
+    <li><strong>Shared Values:</strong> Cultura</li>
+    <li><strong>Staff:</strong> Pessoas</li>
+    <li><strong>Skills:</strong> Competências</li>
+    <li><strong>Style:</strong> Liderança</li>
+  </ul>
+
+  <h3>Estratégias Genéricas de Porter</h3>
+
+  <div class="image-container">
+    <img src="media/image40.png" alt="Position Framework" loading="lazy">
+    <div class="image-caption">Positioning Framework</div>
+  </div>
+
+  <ul>
+    <li><strong>Liderança de Custo:</strong> Ser o mais barato</li>
+    <li><strong>Diferenciação:</strong> Ser único/diferente</li>
+    <li><strong>Foco:</strong> Servir um nicho específico</li>
+  </ul>
+
+  <div class="enrichment">Deep Shit Valley - A zona de morte estratégica. Não ser nem barato, nem diferenciado, nem focado. Evitar sempre esta posição!</div>
+
+  <h3>Value Curves: Visualizando Posicionamento</h3>
+
+  <div class="image-container">
+    <img src="media/image41.jpg" alt="Value Curves" loading="lazy">
+    <div class="image-caption">Value Curves</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image42.png" alt="Value Curve Diagram" loading="lazy">
+    <div class="image-caption">Value Curve Diagram</div>
+  </div>
+
+  <p>Value Curves comparam fatores competitivos entre empresas:</p>
+  <ul>
+    <li><strong>Fatores Competitivos:</strong> Preço, qualidade, serviço, etc.</li>
+    <li><strong>Diferenciação:</strong> Onde somos superiores</li>
+    <li><strong>Higiénicos:</strong> O mínimo esperado</li>
+  </ul>
+
+  <h3>Caso Ryanair: Exemplar de Liderança de Custo</h3>
+  <p>Ryanair exemplifica como dominar através da gestão de custos:</p>
+  <ul>
+    <li><strong>Gestão Ativa de Ativos:</strong> Máxima utilização de aviões</li>
+    <li><strong>Maximização de Receitas:</strong> Ancillary revenue (bagagem, assentos, etc.)</li>
+    <li><strong>Redução de Custos:</strong> Operações leanness, pessoal eficiente</li>
+  </ul>
+
+  <div class="quote">O name of the game numa empresa de capital intensivo é a rotação do ativo.</div>
+
+  <div class="enrichment">Boca do Crocodilo - Metáfora para quando custos > receitas, as mandíbulas abrem-se. Situação insustentável.</div>
+
+  <div class="image-container">
+    <img src="media/image43.jpg" alt="Tensão Estratégica" loading="lazy">
+    <div class="image-caption">Tensão Estratégica</div>
+  </div>
+
+<div class="reflection">
+  <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+  <p>A tensão entre liderança de custo e diferenciação é algo que vivo diariamente. A Portilame não pode competir pelo preço mais baixo contra a construção tradicional em betão — seria cair no Deep Shit Valley. A nossa estratégia é inequivocamente de diferenciação: construção industrializada, sustentável, com qualidade controlada em fábrica. A value curve da Portilame vs. construtores tradicionais mostraria scores elevados em sustentabilidade, velocidade de construção e controlo de qualidade, mas scores menores em preço unitário e perceção de robustez (fator cultural). O caso da Ryanair que estudámos mostra como a clareza de posicionamento é essencial — eles sabem exatamente quem são. Eu procuro essa mesma clareza para cada empresa do meu ecossistema.</p>
+</div>
+
+    <!-- Handwritten Notes Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📝 Handwritten Notes (Páginas 5-6)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image44.jpg" alt="Nota manuscrita p.5" loading="lazy"><div class="gallery-item-label">p.5</div></div>
+      <div class="gallery-item"><img src="media/image45.jpg" alt="Nota manuscrita p.6" loading="lazy"><div class="gallery-item-label">p.6</div></div>
+    </div>
+  </div>
+
+  <!-- Class Photos Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📸 Class Sessions</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image46.jpg" alt="EasyJet ERRC" loading="lazy"><div class="gallery-item-label">EasyJet ERRC Analysis</div></div>
+      <div class="gallery-item"><img src="media/image47.jpg" alt="Ansoff flipchart" loading="lazy"><div class="gallery-item-label">Ansoff Matrix Flipchart</div></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SECTION IV: ESTRATÉGIAS CORPORATIVAS -->
+<section id="section-iv" class="section-id">
+  <h2>IV · Estratégias Corporativas</h2>
+  <p><em>Aula 4</em></p>
+
+  <h3>Estratégias Corporativas: Portfolio e Diversificação</h3>
+  <p>No nível corporativo, decidimos em que negócios operar e como criar sinergia entre eles.</p>
+
+  <h3>Estratégias Primárias vs. Secundárias</h3>
+  <ul>
+    <li><strong>Primárias (Expandem Mercado):</strong> Crescimento total do mercado</li>
+    <li><strong>Secundárias (Ganham Quota):</strong> Roubar quota a concorrentes</li>
+  </ul>
+  <p><em>Exemplo Dodot: Investimento em inovação de produto (primária) vs. Agressividade de preço (secundária).</em></p>
+
+  <h3>Matriz Ansoff: Crescimento Estratégico</h3>
+
+  <div class="image-container">
+    <img src="media/image48.jpg" alt="Ansoff" loading="lazy">
+    <div class="image-caption">Matriz Ansoff</div>
+  </div>
+
+  <ul>
+    <li><strong>Penetração de Mercado:</strong> Mais vendas com produto existente em mercado existente</li>
+    <li><strong>Desenvolvimento de Produto:</strong> Novos produtos para mercado existente</li>
+    <li><strong>Desenvolvimento de Mercado:</strong> Produto existente para novo mercado</li>
+    <li><strong>Diversificação:</strong> Novo produto para novo mercado (maior risco)</li>
+  </ul>
+
+  <h3>BCG Matrix: Gestão de Portfolio</h3>
+
+  <div class="image-container">
+    <img src="media/image49.jpg" alt="BCG" loading="lazy">
+    <div class="image-caption">Boston Consulting Group Matrix</div>
+  </div>
+
+  <p>A matriz BCG organiza negócios por crescimento de mercado e quota de mercado:</p>
+  <ul>
+    <li><strong>Estrelas (Stars):</strong> Alto crescimento, alta quota. Investir, defender.</li>
+    <li><strong>Vacas Leiteiras (Cash Cows):</strong> Baixo crescimento, alta quota. Extrair caixa.</li>
+    <li><strong>Interrogações (Question Marks):</strong> Alto crescimento, baixa quota. Investir ou desinvestir?</li>
+    <li><strong>Cães (Dogs):</strong> Baixo crescimento, baixa quota. Divest ou manter para sinergia?</li>
+  </ul>
+
+  <div class="quote">Portfólios desequilibrados...</div>
+
+  <div class="quote">Cão que estruturalmente perde dinheiro...</div>
+
+  <div class="enrichment">Ciclo do Dinheiro - As Vacas Leiteiras financiam as Estrelas e Interrogações. Sem este ciclo, a empresa fica sem recursos para inovação.</div>
+
+  <h3>Parenting Styles (Ashridge)</h3>
+  <p>Como o corporativo interage com as unidades de negócio:</p>
+  <ul>
+    <li><strong>Stand-alone:</strong> Cada negócio opera independentemente</li>
+    <li><strong>Linkage:</strong> Corporativo conecta negócios para sinergia</li>
+    <li><strong>Central Functions:</strong> Corporativo centraliza funções (financeira, IT, etc.)</li>
+    <li><strong>Portfolio Management:</strong> Corporativo gerencia ativaciona caixa, optimiza portfolio</li>
+  </ul>
+
+  <h3>Casos Sonae e Amazon</h3>
+  <p><strong>Sonae:</strong> Exemplar de portfolio diversificado em retail, tecnologia, media.</p>
+  <div class="quote">Tem negócios que valem mais que a própria Sonae.</div>
+
+  <p><strong>Amazon:</strong> Estratégia de ecossistema - AWS, Retail, Advertising, Logística, etc., todas criando valor de forma integrada.</p>
+
+<div class="reflection">
+  <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+  <p>A matriz BCG aplicada ao meu ecossistema empresarial é um exercício revelador. A Portilame é a minha Cash Cow — negócio maduro, com cash flow estável que financia o crescimento das outras empresas. A Proemma e a BIND são Stars — crescimento elevado em setores promissores. A PUUR Clinic e a PAZONARA são Question Marks — apostas em áreas novas (saúde e F&B) com potencial mas ainda sem prova de conceito consolidada. O Professor diz que 'portfólios desequilibrados são um erro estratégico fundamental' e reconheço que o meu portfólio tem demasiadas Question Marks para apenas uma Cash Cow. O desconto de conglomerado que afeta a Sonae é um risco real para qualquer ecossistema diversificado — a minha resposta é manter sinergias reais entre as empresas, não apenas diversificação financeira.</p>
+</div>
+
+    <!-- Handwritten Notes Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📝 Handwritten Notes (Páginas 27-37)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image50.jpg" alt="Nota manuscrita p.27" loading="lazy"><div class="gallery-item-label">p.27</div></div>
+      <div class="gallery-item"><img src="media/image51.jpg" alt="Nota manuscrita p.28" loading="lazy"><div class="gallery-item-label">p.28</div></div>
+      <div class="gallery-item"><img src="media/image52.jpg" alt="Nota manuscrita p.29" loading="lazy"><div class="gallery-item-label">p.29</div></div>
+      <div class="gallery-item"><img src="media/image53.jpg" alt="Nota manuscrita p.30" loading="lazy"><div class="gallery-item-label">p.30</div></div>
+      <div class="gallery-item"><img src="media/image54.jpg" alt="Nota manuscrita p.31" loading="lazy"><div class="gallery-item-label">p.31</div></div>
+      <div class="gallery-item"><img src="media/image55.jpg" alt="Nota manuscrita p.32" loading="lazy"><div class="gallery-item-label">p.32</div></div>
+      <div class="gallery-item"><img src="media/image56.jpg" alt="Nota manuscrita p.33" loading="lazy"><div class="gallery-item-label">p.33</div></div>
+      <div class="gallery-item"><img src="media/image57.jpg" alt="Nota manuscrita p.34" loading="lazy"><div class="gallery-item-label">p.34</div></div>
+      <div class="gallery-item"><img src="media/image58.jpg" alt="Nota manuscrita p.35" loading="lazy"><div class="gallery-item-label">p.35</div></div>
+      <div class="gallery-item"><img src="media/image59.jpg" alt="Nota manuscrita p.36" loading="lazy"><div class="gallery-item-label">p.36</div></div>
+      <div class="gallery-item"><img src="media/image60.jpg" alt="Nota manuscrita p.37" loading="lazy"><div class="gallery-item-label">p.37</div></div>
+    </div>
+  </div>
+
+  <!-- Class Photos Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📸 Class Sessions</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image61.jpg" alt="BCG no quadro" loading="lazy"><div class="gallery-item-label">BCG Matrix no quadro</div></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- SECTION V: INTERNACIONALIZAÇÃO, INOVAÇÃO E M&A -->
+<section id="section-v" class="section-id">
+  <h2>V · Internacionalização, Inovação e M&A</h2>
+  <p><em>Aula 5</em></p>
+
+  <h3>CAGE: Distâncias para Internacionalização</h3>
+  <p>CAGE ajuda a avaliar a adequação de uma estratégia de entrada em novos mercados:</p>
+  <ul>
+    <li><strong>Cultural:</strong> Diferenças de valores, idioma, hábitos</li>
+    <li><strong>Administrative:</strong> Regulação, sistemas políticos, qualidade institucional</li>
+    <li><strong>Geographic:</strong> Distância, proximidade, tempo de viagem</li>
+    <li><strong>Economic:</strong> Nível de desenvolvimento, custo, poder de compra</li>
+  </ul>
+
+  <div class="quote">Não há uma resposta base...</div>
+
+  <h3>Framework 12C: Internacionalização Estruturada</h3>
+  <p>Um framework abrangente com 12 dimensões críticas:</p>
+  <ol>
+    <li><strong>Country:</strong> Seleção do mercado</li>
+    <li><strong>Concentration:</strong> Nível de exposição</li>
+    <li><strong>Culture/Consumer:</strong> Adaptação ao consumidor local</li>
+    <li><strong>Choices:</strong> Decisões estratégicas no mercado</li>
+    <li><strong>Consumption:</strong> Padrões de consumo</li>
+    <li><strong>Contractual:</strong> Acordos comerciais</li>
+    <li><strong>Channels:</strong> Distribuição</li>
+    <li><strong>Communication:</strong> Marketing e branding</li>
+    <li><strong>Capacity:</strong> Capacidades produtivas</li>
+    <li><strong>Currency/Costs:</strong> Risco cambial, eficiência</li>
+    <li><strong>Commitment:</strong> Nível de investimento</li>
+    <li><strong>Caveats:</strong> Riscos e armadilhas</li>
+  </ol>
+
+  <h3>Modos de Entrada Internacionais</h3>
+  <p>Progressão de envolvimento internacional (risco e investimento crescentes):</p>
+  <ol>
+    <li><strong>Exportação:</strong> Venda direta a partir do país de origem</li>
+    <li><strong>Acordos:</strong> Licensing, franchising, joint ventures</li>
+    <li><strong>Parcerias:</strong> Alianças estratégicas</li>
+    <li><strong>Investimento Direto:</strong> Fábrica, escritório, aquisição</li>
+  </ol>
+
+  <h3>Curva de Adoção: Dinâmica de Mercado</h3>
+  <p>Nem todos os clientes adotam inovações ao mesmo tempo. A curva de adoção mostra:</p>
+
+  <ul>
+    <li><strong>Innovators:</strong> 2.5% - Os primeiros</li>
+    <li><strong>Early Adopters:</strong> 13.5% - Líderes de opinião</li>
+    <li><strong>Early Majority:</strong> 34% - Pragmatistas</li>
+    <li><strong>Late Majority:</strong> 34% - Céticos</li>
+    <li><strong>Laggards:</strong> 16% - Resistentes</li>
+  </ul>
+
+  <p><strong>Tipping Point:</strong> Quando chegamos a 15-16% de adoção, o mercado acelera.<br><strong>Tripping Point:</strong> Quando a inovação morre (falha em atingir critical mass).</p>
+
+  <div class="quote">Os conservadores quando chegam ao mercado...</div>
+
+  <p><strong>Estratégia de Entrada:</strong><br>
+  <strong>ASAP (As Soon As Possible):</strong> Ser primeiro, estabelecer normas<br>
+  <strong>ALAP (As Late As Possible):</strong> Aprender com os primeiros, reduzir incerteza</p>
+
+  <h3>Ciclo de Vida do Produto</h3>
+  <ul>
+    <li><strong>Introdução:</strong> Baixo volume, altos custos, break-even distante</li>
+    <li><strong>Crescimento:</strong> Volume cresce, custos diminuem, margem melhora</li>
+    <li><strong>Maturidade:</strong> Máximo volume, máxima margem, antes da saturação</li>
+    <li><strong>Declínio:</strong> Volume cai, margens sofrem pressão</li>
+  </ul>
+
+  <p><strong>Break-even Point:</strong> Quando receitas = custos acumulados.</p>
+
+  <h3>Free Cash Flow (FCF) ao Longo do Ciclo</h3>
+  <p>O FCF é negativo na Introdução, maximiza na Maturidade, e cai no Declínio. A estratégia de portfólio necessita de empresas em diferentes fases para manter fluxo positivo.</p>
+
+  <h3>M&A: Fusões e Aquisições</h3>
+  <p>M&A são estratégias de crescimento rápido, mas com elevado risco.</p>
+
+  <ul>
+    <li><strong>Motivações:</strong> Crescimento, acesso a ativos/tecnologia, sinergia, diversificação</li>
+    <li><strong>Riscos:</strong> Integração cultural, destruição de valor, sinergias não realizadas</li>
+  </ul>
+
+  <div class="quote">Há mundo para lá das fusões e aquisições...</div>
+
+  <h3>Arquitetura Financeira e SAFe Framework</h3>
+  <div class="enrichment">Arquitetura Financeira - Como financiar a estratégia (equity, debt, operações).</div>
+
+  <p><strong>SAFe Framework (Suitability, Acceptability, Feasibility):</strong></p>
+  <ul>
+    <li><strong>Suitability:</strong> Estratégia é apropriada para o contexto?</li>
+    <li><strong>Acceptability:</strong> Stakeholders aceitam?</li>
+    <li><strong>Feasibility:</strong> Temos recursos/capacidades?</li>
+  </ul>
+
+  <h3>Alianças Estratégicas</h3>
+  <p>Formas de cooperação sem merger completo:</p>
+  <ul>
+    <li><strong>Escala:</strong> Combinar volumes para força competitiva</li>
+    <li><strong>Acesso:</strong> Entrada em novos mercados/tecnologias</li>
+    <li><strong>Complementaridade:</strong> Combinar diferentes competências</li>
+    <li><strong>Colusão:</strong> Cooperação (nem sempre ética/legal)</li>
+  </ul>
+
+  <p><em>Caso: Disney + Pixar - Alianças criativas que geraram valor extraordinário.</em></p>
+
+  <h3>Diagramas de Estratégia Digital (iPad Section)</h3>
+  <p>Visualizações de conceitos-chave da aula:</p>
+
+  <div class="image-container">
+    <img src="media/image62.jpg" alt="Shared Value" loading="lazy">
+    <div class="image-caption">Shared Value Framework</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image63.jpg" alt="Ecossistema" loading="lazy">
+    <div class="image-caption">Ecosystem Strategy</div>
+  </div>
+
+  <!-- iPad Diagrams - Prominently Displayed -->
+  <h3>Diagramas Estratégicos em Detalhe</h3>
+
+  <div class="image-container">
+    <img src="media/image74.jpg" alt="S-Curve Strategy" loading="lazy">
+    <div class="image-caption">S-Curve Innovation Dynamics</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image75.jpg" alt="Free Cash Flow Timeline" loading="lazy">
+    <div class="image-caption">Free Cash Flow Across Product Lifecycle</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image76.jpg" alt="Adoption Curve Detail" loading="lazy">
+    <div class="image-caption">Detailed Adoption Curve</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image77.jpg" alt="Product Lifecycle" loading="lazy">
+    <div class="image-caption">Product Lifecycle Phases</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image78.jpg" alt="Competition Dynamics" loading="lazy">
+    <div class="image-caption">Competition Over Time</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image79.jpg" alt="Marketing Investment" loading="lazy">
+    <div class="image-caption">Marketing Investment Trajectory</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image80.jpg" alt="Combined Strategic View" loading="lazy">
+    <div class="image-caption">Combined Strategic View</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image81.jpg" alt="Strategic Framework Integration" loading="lazy">
+    <div class="image-caption">Strategic Framework Integration</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image82.jpg" alt="Final Synthesis" loading="lazy">
+    <div class="image-caption">Final Strategic Synthesis</div>
+  </div>
+
+<div class="reflection">
+  <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+  <p>A análise CAGE da internacionalização da construção em madeira é particularmente relevante para a Portilame. Culturalmente, os mercados do Norte da Europa (Escandinávia, Alemanha) têm muito menor distância — a madeira já é o material de construção dominante. Administrativamente, a regulamentação europeia harmonizada facilita. Geograficamente, a distância é um desafio para um produto pesado e volumoso. Economicamente, esses mercados têm maior poder de compra e disposição para pagar o premium da sustentabilidade. A frase do Professor sobre alianças estratégicas como alternativa a M&A ressoa profundamente — nos meus planos de expansão internacional, prefiro alianças de acesso (competências complementares) a aquisições que poderiam destruir a cultura que construí.</p>
+</div>
+
+    <!-- Handwritten Notes Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📝 Handwritten Notes (Páginas 38-43)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image64.jpg" alt="Nota manuscrita p.38" loading="lazy"><div class="gallery-item-label">p.38</div></div>
+      <div class="gallery-item"><img src="media/image65.jpg" alt="Nota manuscrita p.39" loading="lazy"><div class="gallery-item-label">p.39</div></div>
+      <div class="gallery-item"><img src="media/image66.jpg" alt="Nota manuscrita p.40" loading="lazy"><div class="gallery-item-label">p.40</div></div>
+      <div class="gallery-item"><img src="media/image67.jpg" alt="Nota manuscrita p.41" loading="lazy"><div class="gallery-item-label">p.41</div></div>
+      <div class="gallery-item"><img src="media/image68.jpg" alt="Nota manuscrita p.42" loading="lazy"><div class="gallery-item-label">p.42</div></div>
+      <div class="gallery-item"><img src="media/image69.jpg" alt="Nota manuscrita p.43" loading="lazy"><div class="gallery-item-label">p.43</div></div>
+    </div>
+  </div>
+
+  <!-- Handwritten Avaliação Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📋 Handwritten Avaliação (Páginas 1-4)</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image70.jpg" alt="Avaliação p.1" loading="lazy"><div class="gallery-item-label">Avaliação p.1</div></div>
+      <div class="gallery-item"><img src="media/image71.jpg" alt="Avaliação p.2" loading="lazy"><div class="gallery-item-label">Avaliação p.2</div></div>
+      <div class="gallery-item"><img src="media/image72.jpg" alt="Avaliação p.3" loading="lazy"><div class="gallery-item-label">Avaliação p.3</div></div>
+      <div class="gallery-item"><img src="media/image73.jpg" alt="Avaliação p.4" loading="lazy"><div class="gallery-item-label">Avaliação p.4</div></div>
+    </div>
+  </div>
+
+  <!-- Class Photos Gallery -->
+  <div class="gallery">
+    <div class="gallery-toggle" onclick="toggleGallery(event)">📸 Class Sessions & Materials</div>
+    <div class="gallery-content">
+      <div class="gallery-item"><img src="media/image83.jpg" alt="Prof. Reis" loading="lazy"><div class="gallery-item-label">Prof. Luís Filipe Reis</div></div>
+      <div class="gallery-item"><img src="media/image84.jpg" alt="PBS Strategy Exam Assistant" loading="lazy"><div class="gallery-item-label">PBS Strategy Exam Assistant</div></div>
+      <div class="gallery-item"><img src="media/image85.jpg" alt="Class Photo 1" loading="lazy"><div class="gallery-item-label">Classroom Session</div></div>
+      <div class="gallery-item"><img src="media/image86.jpg" alt="Class Photo 2" loading="lazy"><div class="gallery-item-label">Strategy Seminar</div></div>
+    </div>
+  </div>
+
+  <!-- Word Clouds -->
+  <h3>Key Concepts Word Clouds</h3>
+
+  <div class="image-container">
+    <img src="media/image87.jpg" alt="Word Cloud 1" loading="lazy">
+    <div class="image-caption">Key Concepts - Session Themes</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image88.jpg" alt="Word Cloud 2" loading="lazy">
+    <div class="image-caption">Strategic Terminology</div>
+  </div>
+
+  <div class="image-container">
+    <img src="media/image89.jpg" alt="Word Cloud 3" loading="lazy">
+    <div class="image-caption">Course Learning Outcomes</div>
+  </div>
+
+</section>
+
+<!-- SECTION VI: TOOLKIT ESTRATÉGICO -->
+<section id="section-vi" class="section-id">
+  <h2>VI · Toolkit Estratégico</h2>
+  <p><em>30 Ferramentas Essenciais para Análise e Decisão Estratégica</em></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Ferramenta</th>
+        <th>Categoria</th>
+        <th>Aplicação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>PESTEL</strong></td>
+        <td>Ambiente Externo</td>
+        <td>Análise de macroambiente: Político, Económico, Social, Tecnológico, Ambiental, Legal</td>
+      </tr>
+      <tr>
+        <td><strong>VUCA</strong></td>
+        <td>Ambiente Externo</td>
+        <td>Avaliar complexidade do ambiente: Volatile, Uncertain, Complex, Ambiguous</td>
+      </tr>
+      <tr>
+        <td><strong>6D's (Transformação Digital)</strong></td>
+        <td>Ambiente Externo</td>
+        <td>Digitalização, Engano, Disrupção, Desmonetização, Desmaterialização, Democratização</td>
+      </tr>
+      <tr>
+        <td><strong>Porter+ (5+3)</strong></td>
+        <td>Ambiente Externo</td>
+        <td>5 forças clássicas + Tecnologia, Regulação, Barreiras à entrada</td>
+      </tr>
+      <tr>
+        <td><strong>CAGE</strong></td>
+        <td>Ambiente Externo</td>
+        <td>Distâncias para internacionalização: Cultural, Administrative, Geographic, Economic</td>
+      </tr>
+      <tr>
+        <td><strong>Matriz Porter</strong></td>
+        <td>Indústria/Concorrência</td>
+        <td>Posicionamento de concorrentes em diferentes dimensões</td>
+      </tr>
+      <tr>
+        <td><strong>Níveis de Concorrência (C1-C4)</strong></td>
+        <td>Indústria/Concorrência</td>
+        <td>C1 Direta, C2 Indireta, C3 Rendimento, C4 Atenção</td>
+      </tr>
+      <tr>
+        <td><strong>VRIN</strong></td>
+        <td>Recursos/Capacidades</td>
+        <td>Valioso, Raro, Inimitável, Não Substituível - avaliação de competências</td>
+      </tr>
+      <tr>
+        <td><strong>Capabilities (Hamel)</strong></td>
+        <td>Recursos/Capacidades</td>
+        <td>Ativos Críticos, Competências Distintivas, Relações Privilegiadas</td>
+      </tr>
+      <tr>
+        <td><strong>7S McKinsey</strong></td>
+        <td>Recursos/Capacidades</td>
+        <td>Strategy, Structure, Systems, Shared Values, Staff, Skills, Style</td>
+      </tr>
+      <tr>
+        <td><strong>SWOT</strong></td>
+        <td>Direção/Posicionamento</td>
+        <td>Strengths, Weaknesses, Opportunities, Threats - matriz de alinhamento</td>
+      </tr>
+      <tr>
+        <td><strong>Ansoff</strong></td>
+        <td>Direção/Posicionamento</td>
+        <td>Penetração, Dev. Produto, Dev. Mercado, Diversificação</td>
+      </tr>
+      <tr>
+        <td><strong>Horizontes Estratégicos</strong></td>
+        <td>Direção/Posicionamento</td>
+        <td>H1 Defender, H2 Desenvolver, H3 Semear</td>
+      </tr>
+      <tr>
+        <td><strong>BCG Matrix</strong></td>
+        <td>Direção/Posicionamento</td>
+        <td>Gestão de portfolio: Estrelas, Vacas, Interrogações, Cães</td>
+      </tr>
+      <tr>
+        <td><strong>Estratégias Genéricas Porter</strong></td>
+        <td>Estratégia de Negócio</td>
+        <td>Liderança Custo, Diferenciação, Foco</td>
+      </tr>
+      <tr>
+        <td><strong>Value Curves</strong></td>
+        <td>Estratégia de Negócio</td>
+        <td>Visualizar posicionamento vs. concorrência em fatores-chave</td>
+      </tr>
+      <tr>
+        <td><strong>Where/Right/How to Play</strong></td>
+        <td>Estratégia de Negócio</td>
+        <td>5 Perguntas essenciais de business strategy</td>
+      </tr>
+      <tr>
+        <td><strong>Parenting Styles</strong></td>
+        <td>Estratégia de Negócio</td>
+        <td>Stand-alone, Linkage, Central Functions, Portfolio Management</td>
+      </tr>
+      <tr>
+        <td><strong>12C Framework</strong></td>
+        <td>Internacionalização</td>
+        <td>Country, Concentration, Culture, Choices, Consumption, Contractual, Channels, Communication, Capacity, Currency, Commitment, Caveats</td>
+      </tr>
+      <tr>
+        <td><strong>Modos de Entrada</strong></td>
+        <td>Internacionalização</td>
+        <td>Exportação, Acordos, Parcerias, Investimento Direto</td>
+      </tr>
+      <tr>
+        <td><strong>Curva de Adoção</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Innovators 2.5%, Early Adopters 13.5%, Early Majority 34%, Late Majority 34%, Laggards 16%</td>
+      </tr>
+      <tr>
+        <td><strong>Ciclo de Vida Produto</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Introdução, Crescimento, Maturidade, Declínio + Break-even</td>
+      </tr>
+      <tr>
+        <td><strong>Tipping/Tripping Points</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Tipping Point (15-16%), Tripping Point (morte), Breaking Point (crash)</td>
+      </tr>
+      <tr>
+        <td><strong>Ciclo do Dinheiro</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Vacas Leiteiras financiam Estrelas e Interrogações</td>
+      </tr>
+      <tr>
+        <td><strong>Free Cash Flow (FCF)</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Negativo na Introdução, máximo na Maturidade, cai no Declínio</td>
+      </tr>
+      <tr>
+        <td><strong>SOTP (Sum of the Parts)</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Avaliação de portfolio somando valor de cada negócio</td>
+      </tr>
+      <tr>
+        <td><strong>Sinergias</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Receita, Custo, Financeira - criação de valor através de combinação</td>
+      </tr>
+      <tr>
+        <td><strong>Arquitetura Financeira</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Como financiar estratégia: Equity, Debt, Operações</td>
+      </tr>
+      <tr>
+        <td><strong>SAFe Framework</strong></td>
+        <td>Inovação/Ciclo Vida</td>
+        <td>Suitability, Acceptability, Feasibility</td>
+      </tr>
+      <tr>
+        <td><strong>Cultural Web</strong></td>
+        <td>Ética/Alinhamento</td>
+        <td>Histórias, Símbolos, Estrutura de Poder, Estrutura Org, Sistemas, Rituais</td>
+      </tr>
+      <tr>
+        <td><strong>Matriz Ética-Legal</strong></td>
+        <td>Ética/Alinhamento</td>
+        <td>Ético+Legal, Ético+Ilegal, Antiético+Legal, Antiético+Ilegal</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="reflection">
+    <h4>🔍 Reflexão Pessoal — Pedro Cunha</h4>
+    <p>Das 30 ferramentas catalogadas, as que mais utilizo na prática são o PESTEL (para monitorizar o ambiente regulatório da construção sustentável), o VRIN (para avaliar se as nossas capacidades são genuinamente diferenciadoras), e a Matriz de Ansoff (para estruturar decisões de crescimento). A rotina de informação estratégica que o Professor enfatiza é algo que pratico diariamente — monitorizo tendências em construção industrializada, regulamentação europeia, e inovação em materiais. É, como ele diz, 'como lavar os dentes'.</p>
+  </div>
+
+</section>
+
+<!-- SECTION VII: PREPARAÇÃO PARA EXAME -->
+<section id="section-vii" class="section-id">
+  <h2>VII · Preparação para o Exame</h2>
+  <p><em>Estratégia e Estrutura de Resposta</em></p>
+
+  <h3>9 Temas-Chave por Palavra-Chave</h3>
+  <ul>
+    <li><strong>Contexto Estratégico:</strong> VUCA, PESTEL, Ambiente externo, Transformação digital</li>
+    <li><strong>Competitividade:</strong> Porter+, Níveis de Concorrência, Value Curves, Posicionamento</li>
+    <li><strong>Capabilities:</strong> VRIN, Competências distintivas, Joia da Coroa, Teste do Algodão</li>
+    <li><strong>Business Strategy:</strong> Where/Right/How to Play, Estratégias Genéricas, Deep Shit Valley</li>
+    <li><strong>Posicionamento:</strong> SWOT, Value Curves, Matriz de Porter, Boca do Crocodilo</li>
+    <li><strong>Corporate Strategy:</strong> Ansoff, BCG, Parenting, Ciclo do Dinheiro, SOTP</li>
+    <li><strong>Inovação:</strong> Curva de Adoção, Ciclo de Vida, Tipping/Tripping Points, FCF</li>
+    <li><strong>Alinhamento:</strong> 7S McKinsey, Cultural Web, Arquitetura Financeira</li>
+    <li><strong>Internacionalização:</strong> CAGE, 12C, Modos de Entrada, Alianças</li>
+    <li><strong>Ética:</strong> Matriz Ética-Legal, Propósito (Riqueza + Saúde), Decisões fundamentadas</li>
+  </ul>
+
+  <h3>Método Gold Standard: 3 Passos</h3>
+  <ol>
+    <li><strong>Passo 1:</strong> Analisar a questão. Identificar palavra-chave e tipo de questão.</li>
+    <li><strong>Passo 2:</strong> Usar 2-3 ferramentas relevantes para estruturar a resposta.</li>
+    <li><strong>Passo 3:</strong> Conclusão clara, recomendação prática, julgamento crítico.</li>
+  </ol>
+
+  <h3>7 Tipos de Questão Esperados</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Tipo</th>
+        <th>Descrição</th>
+        <th>Abordagem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>A - CSO</strong></td>
+        <td>Chief Strategy Officer - Análise situacional</td>
+        <td>PESTEL, Porter+, SWOT, Business Strategy</td>
+      </tr>
+      <tr>
+        <td><strong>B - Board</strong></td>
+        <td>Decisão no conselho de administração</td>
+        <td>BCG, Ansoff, M&A, Portfolio Management</td>
+      </tr>
+      <tr>
+        <td><strong>C - Counter-Argue</strong></td>
+        <td>Argumentar contra posição</td>
+        <td>Análise crítica, SWOT inverso, Cenários</td>
+      </tr>
+      <tr>
+        <td><strong>D - Market Entry</strong></td>
+        <td>Entrada em novo mercado</td>
+        <td>CAGE, 12C, Modos de Entrada, VRIN</td>
+      </tr>
+      <tr>
+        <td><strong>E - Capabilities</strong></td>
+        <td>Competências e recursos</td>
+        <td>VRIN, Capabilities Hamel, Joia da Coroa</td>
+      </tr>
+      <tr>
+        <td><strong>F - Geopolitical</strong></td>
+        <td>Impacto de eventos globais</td>
+        <td>PESTEL Político, Cenários, Risco</td>
+      </tr>
+      <tr>
+        <td><strong>G - Transversal</strong></td>
+        <td>Múltiplas dimensões integradas</td>
+        <td>7S McKinsey, Ética, Alinhamento completo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Terminologia Obrigatória</h3>
+  <p>Demonstre conhecimento destas expressões chave:</p>
+  <ul>
+    <li><strong>Porter+:</strong> 5 forças + Tecnologia + Regulação + Barreiras</li>
+    <li><strong>Deep Shit Valley:</strong> Não ser nem barato nem diferenciado (EVITAR)</li>
+    <li><strong>Key Drivers for Change:</strong> Forças que transformam o setor</li>
+    <li><strong>Headwinds/Tailwinds:</strong> Obstáculos vs. Oportunidades do ambiente</li>
+    <li><strong>Ciclo do Dinheiro:</strong> Vacas Leiteiras financiam inovação</li>
+    <li><strong>Joia da Coroa:</strong> Competência mais valiosa</li>
+    <li><strong>Teste do Algodão:</strong> Se remover isto, ainda há valor?</li>
+    <li><strong>Arquitetura Financeira:</strong> Como estruturar financiamento</li>
+    <li><strong>Boca do Crocodilo:</strong> Custos > Receitas, insustentável</li>
+  </ul>
+
+  <h3>Estrutura Recomendada de Resposta</h3>
+  <ol>
+    <li><strong>Introdução:</strong> Parafrasear questão, contexto breve</li>
+    <li><strong>Análise:</strong> Aplicar 2-3 ferramentas relevantes</li>
+    <li><strong>Argumento:</strong> Explicar cada ponto com evidência</li>
+    <li><strong>Conclusão:</strong> Responder diretamente à questão</li>
+    <li><strong>Recomendação:</strong> O que fazer? Por quê? Riscos?</li>
+  </ol>
+
+  <h3>Dicas de Exame</h3>
+  <ul>
+    <li>Leia a questão 3 vezes antes de responder</li>
+    <li>Use exemplos reais (Ryanair, Sonae, Amazon, Disney/Pixar, Dodot, EasyJet, etc.)</li>
+    <li>Evite respostas genéricas - seja específico e crítico</li>
+    <li>Use terminologia estratégica de forma natural</li>
+    <li>Diagrama ou esboço quando apropriado</li>
+    <li>Gerencie tempo - responda primeiro ao mais fácil</li>
+    <li>Revise respostas antes de entregar</li>
+  </ul>
+
+</section>
+
+<!-- SECTION IX: MOMENTOS MEMORÁVEIS -->
+<section id="section-ix" class="section-id">
+  <h2>IX · Momentos Memoráveis</h2>
+  <p><em>Gems e Insights Marcantes do Professor Luís Filipe Reis</em></p>
+
+  <h3>As 4 Frases de Ouro</h3>
+
+  <div class="quote">Adoro consultores e uso muito, uso muito. Os consultores são a melhor forma que eu tenho de credibilizar as minhas opiniões.</div>
+  <p><em>— Sessão de Estratégia e Tempo</em></p>
+
+  <div class="quote">Detesto ter que ter discussões sobre o budget, porque acho que é uma coisa ridícula.</div>
+  <p><em>— Sessão de Planeamento Financeiro</em></p>
+
+  <div class="quote">A estratégia tem 2 pernas e fazê-las fazer uma e outra andar com a direita e com a esquerda tem que ver com disciplina.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">A cultura não se decreta. A cultura diz-se... a cultura não se impõe. A cultura é muito mais difícil.</div>
+  <p><em>— Sessão de Cultura Organizacional</em></p>
+
+  
+
+  <h3>Mais Frases Memoráveis</h3>
+
+  <div class="quote">Eu não vos quero ensinar estratégias. Eu quero tentar ajudar-vos a pensar de forma estratégica.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">A única ferramenta que precisam de trazer é a cabeça.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">Quanto mais sabemos, mais sabemos que não sabemos.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">Estratégia é a capacidade de controlar as variáveis incontroláveis, à custa do controlo das variáveis controláveis.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">Todo o nosso trabalho deve ser orientado para sermos ricos e saudáveis. Ricos é o curto prazo, saudáveis é o longo prazo.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">Decisões estratégicas devem ser baseadas na máxima informação disponível no momento.</div>
+  <p><em>— Sessão 2: Análise Estratégica</em></p>
+
+  <div class="quote">Violar lei é fazível, nunca violando ética.</div>
+  <p><em>— Sessão 1: Quem Somos</em></p>
+
+  <div class="quote">Nenhuma empresa compete num vazio.</div>
+  <p><em>— Sessão 2: Análise Estratégica</em></p>
+
+  <div class="quote">Para ser fácil é preciso ser muito bom atrás.</div>
+  <p><em>— Sessão 3: Implementação</em></p>
+
+  <div class="quote">O name of the game numa empresa de capital intensivo é a rotação do ativo.</div>
+  <p><em>— Sessão 4: Finanças Estratégicas</em></p>
+
+  <div class="quote">A Sonae é um grande exemplo. Tem negócios que valem mais que a própria Sonae.</div>
+  <p><em>— Sessão 5: Portfólio Corporativo</em></p>
+
+  <div class="quote">Portfólios desequilibrados são um erro estratégico fundamental.</div>
+  <p><em>— Sessão 5: Portfólio Corporativo</em></p>
+
+  <div class="quote">Há mundo para lá das fusões e aquisições. A melhor maneira de chegar a um objetivo é uma aliança estratégica.</div>
+  <p><em>— Sessão 6: Crescimento e Alianças</em></p>
+
+  <div class="quote">Os estúpidos portugueses insistem em ir para o Brasil.</div>
+  <p><em>— Sessão 6: Internacionalização</em></p>
+
+  <div class="quote">A cultura dá uma falsa sensação de proximidade. Muito cuidado. Somos disparates atrás de disparates.</div>
+  <p><em>— Sessão 6: Internacionalização</em></p>
+
+  <div class="quote">Right people on the bus, primeira decisão. Wrong people, out of the bus, e depois, no final, right people on the right seat.</div>
+  <p><em>— Sessão 7: Talento e Organização</em></p>
+
+  <div class="quote">Há tanta informação, é a tal obesidade de informação... Já não consigo, já não quero mais, estou atolado de informação gigantesca.</div>
+  <p><em>— Sessão 8: Informação Estratégica</em></p>
+
+  <div class="quote">Porque a rotina torna-se um prazer. Uma coisa que eu faço todos os dias é encontrar uma notícia que me surpreende.</div>
+  <p><em>— Sessão 8: Informação Estratégica</em></p>
+
+  <div class="quote">Uma boa organização deve estar permanentemente a gerir pontos de interrogação e a matá-los e a matá-los.</div>
+  <p><em>— Sessão 5: Portfólio Corporativo</em></p>
+
+  <div class="quote">Lavar os dentes, objetivamente está demonstrado que tem benefícios. Fazem a mesma coisa com a informação? Têm uma rotina de informação equivalente?</div>
+  <p><em>— Sessão 8: Informação Estratégica</em></p>
+
+  <div class="quote">Estratégia é histórico, é como lavar os dentes.</div>
+  <p><em>— Sessão 8: Informação Estratégica</em></p>
+
+  <div class="quote">Cabeças boas é pouco, os braços podem falar.</div>
+  <p><em>— Sessão 7: Talento e Organização</em></p>
+
+  <div class="quote">Todo o vazio será ocupado. É uma lei da física. Se não há estratégia, cada departamento faz isso legitimamente.</div>
+  <p><em>— Sessão 7: Organização</em></p>
+
+  <div class="quote">Sweeping balls under the bush.</div>
+  <p><em>— Sessão 7: Decisões Difíceis</em></p>
+
+  <div class="quote">Vão todos escrever a época, a sustentabilidade, a ambição, a inovação e depois saem de lá todos para o café.</div>
+  <p><em>— Sessão de Reflexão Final</em></p>
+
+  <div class="quote">Os valores de uma organização só são reais quando as decisões estão alinhadas com aquilo que se defende. Não é o que está escrito no papel.</div>
+  <p><em>— Sessão de Cultura e Valores</em></p>
+
+
+  <h3>Reflexão Final</h3>
+  <p>O Professor Luís Filipe Reis não apenas ensina estratégia; desconstrói o romanticismo corporativo e revela as realidades humanas e políticas por trás de cada decisão.</p>
+
+</section>
+
+</main>
+
+<!-- BACK TO TOP BUTTON -->
+<button class="back-to-top" id="backToTop">↑</button>
+
+<script>
+// Navigation
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('section');
+const searchInput = document.getElementById('searchInput');
+const breadcrumb = document.getElementById('breadcrumb');
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.querySelector('.sidebar');
+const backToTop = document.getElementById('backToTop');
+
+// Navigation click handler
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const sectionId = item.getAttribute('data-section');
+    const section = document.getElementById(sectionId);
+
+    navItems.forEach(nav => nav.classList.remove('active'));
+    item.classList.add('active');
+
+    section.scrollIntoView({ behavior: 'smooth' });
+    hamburger.classList.remove('active');
+    sidebar.classList.remove('mobile-open');
+
+    updateBreadcrumb(item.textContent);
+  });
+});
+
+// Search functionality
+searchInput.addEventListener('input', (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+
+  navItems.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(searchTerm) ? '' : 'none';
+  });
+});
+
+// Breadcrumb update
+function updateBreadcrumb(text) {
+  breadcrumb.innerHTML = `<a href="#cover" onclick="scrollToSection('cover')">Home</a> / <span>${text}</span>`;
+}
+
+function scrollToSection(sectionId) {
+  document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Hamburger menu
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  sidebar.classList.toggle('mobile-open');
+});
+
+// Gallery toggle
+function toggleGallery(event) {
+  const toggle = event.currentTarget;
+  const content = toggle.nextElementSibling;
+
+  toggle.classList.toggle('expanded');
+  content.classList.toggle('expanded');
+}
+
+// Back to top button
+window.addEventListener('scroll', () => {
+  if (window.pageYOffset > 300) {
+    backToTop.classList.add('visible');
+  } else {
+    backToTop.classList.remove('visible');
+  }
+});
+
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Intersection observer for active nav
+const observerOptions = {
+  root: null,
+  rootMargin: '-50% 0px -50% 0px',
+  threshold: 0
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      const navItem = document.querySelector(`[data-section="${id}"]`);
+
+      navItems.forEach(nav => nav.classList.remove('active'));
+      if (navItem) navItem.classList.add('active');
+
+      updateBreadcrumb(navItem?.textContent || 'Home');
+    }
+  });
+}, observerOptions);
+
+sections.forEach(section => {
+  observer.observe(section);
+});
+
+// Initial active state
+document.querySelector('[data-section="cover"]').classList.add('active');
+</script>
+
+</body>
+</html>
